@@ -4,12 +4,18 @@ using UnityEngine;
 using System.Linq;
 using KModkit;
 using System;
+using System.IO;
 
 
 public class ASCIIArtScript : MonoBehaviour {
 
 	public KMAudio audio;
 	public KMBombInfo bomb;
+
+	static int moduleIdCounter = 1;
+	int moduleId;
+	public bool moduleSolved = false;
+
 
 	public KMSelectable numpad1;
 	public KMSelectable numpad2;
@@ -31,6 +37,9 @@ public class ASCIIArtScript : MonoBehaviour {
 	public KMSelectable choix3;
 	public KMSelectable choix4;
 
+	public Font policeChange;
+	public Material matChange;
+
 	public Renderer row1,row2,row3,row4,row5,row6,row7,row8,row9,row10,row11,row12,row13,row14,row15,row16,row17,row18,row19,row20,row21,row22,row23,row24,row25;
 	public Renderer[] rowarray;
 
@@ -42,7 +51,31 @@ public class ASCIIArtScript : MonoBehaviour {
 			//Text
 			new String[]{ },
 			//Bomb
-			new String[]{@".\Assets\ASCII\Category1\bomb.txt" },
+			new String[]{@"                                                 
+                                                 
+                                                 
+                                 . +    `        
+                                   +.!+.         
+                                 + .! ! .        
+                                    ##           
+                                    #            
+                  _###########_    ##            
+               _#######+++#######_#.             
+              ######:       ``!####              
+            .###+`              !###.            
+           .###`    .##          `###.           
+           ###+   _###.           !###           
+           ###    .#!             ####           
+           !###                   ###+           
+            !##!                !###+            
+             !###.             !####+            
+              `#####.__   __.#####`              
+                `!#############+`                
+                   ```+++++```                   
+                                                 
+                                                 
+                                                 
+                                                 "},
 			//Food
 			new String[]{ },
 			//Object
@@ -50,14 +83,62 @@ public class ASCIIArtScript : MonoBehaviour {
 			//Emote
 			new String[]{ },
 			//Animal
-			new String[]{ }
+			new String[]{ @"       ``°+_           __
+        ``  `°++____,+°  `+
+         #`+         !    ``+
+         #  )       #      # `
+          )++      ++ +#+`+;  #
+         !##+++  +###+++   ` ;
+         ; _ °    __        !#`
+         ``o>   !`o_>      ;#+ `+
+        `°`+__ ;   __--- !#+   `
+        === `_!   ;=====_+°#+     ;
+         ,________________         ;
+              ;                    ;
+            +°                      ;
+          +°                        ;
+        +°     ++     ,      +       ;
+       #       ##++  !      ;##+     |
+      !      `+;##+  |       ;#++    ;
+     #         |#+   #       ;#+    ;
+     #         ##     ;#++   |+    ;
+      #       #;      ###++++|     |
+      !`     ,! `      ;#####;     ;
+    +#+ `#++|    #     ; °+°°|     ;
+   ##+  #°°  `°+,,;     ;°   ;     ;
++°°+ _+°`      ! `;      `,__#      `
+`----    `-----   ;      !    ------!"}
 		},
 		//Category2
 		new String[][] {
 			//Text
 			new String[]{ },
 			//Bomb
-			new String[]{ },
+			new String[]{@"                                                 
+                                                 
+                                                 
+                                 \   |   /       
+                                  _ / \ _        
+                                 -  \ /  -       
+                                    / /          
+                ___----------___    | |          
+              //                 \\ / /          
+             //                   \\ /           
+            //   //                \\            
+           //    //                 \\           
+          //   //                    \\          
+          ||                         ||          
+          ||                         ||          
+          \\                         //          
+           \\                       //           
+            \\                     //            
+             \\                   //             
+              \\___           ___//              
+                   ----------                    
+                                                 
+                                                 
+                                                 
+                                                 "},
 			//Food
 			new String[]{ },
 			//Object
@@ -65,14 +146,62 @@ public class ASCIIArtScript : MonoBehaviour {
 			//Emote
 			new String[]{ },
 			//Animal
-			new String[]{ }
+			new String[]{@"       \---_           __               
+        \\  ----____---  --             
+         |--         /    \--           
+         |  )       |      | \          
+          )--      -- -|---|  |         
+         /||---  -|||---   - |          
+         | _ -    __        /|\         
+         -|o>   /\o_>      ||- --       
+        ----__ |   __----- /|-   \      
+        === \_/   |=====_--|-     |     
+         -/_______________        |     
+              |                    |    
+            --                      |   
+          --                        |   
+        --     --     -      -       |  
+       |       ||--  /      |||-     |  
+      /      --|||-  |       ||--    |  
+     |         ||-   |       ||-    |   
+     |         ||     ||--   |-    |    
+      |       ||      |||----|     |    
+      /\     -/ \      |||||||     |    
+    -|- \|--|    |     | ----|     |    
+   ||-  |--  -----|     |-   |     |    
+---- _--\      / -|      \-__|      \   
+-----    ------   |      /    \-----/   " }
 		},
 		//Category3
 		new String[][] {
 			//Text
 			new String[]{ },
 			//Bomb
-			new String[]{ },
+			new String[]{ @"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒░▓░░░░▒░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▓▒▓▓▒░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▓░▒▓░▓░▒░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█░░░░░░░░
+░░░░░░░░░░░░░░▒███████████▒░░░░██░░░░░░░░
+░░░░░░░░░░░▒███████▓▓▓███████▒█▒░░░░░░░░░
+░░░░░░░░░░██████▒░░░░░░░▒▒▓████░░░░░░░░░░
+░░░░░░░░▒███▓▒░░░░░░░░░░░░░░▓███▒░░░░░░░░
+░░░░░░░▒███▒░░░░▒██░░░░░░░░░░▒███▒░░░░░░░
+░░░░░░░███▓░░░▒███▒░░░░░░░░░░░▓███░░░░░░░
+░░░░░░░███░░░░▒█▓░░░░░░░░░░░░░████░░░░░░░
+░░░░░░░▓███░░░░░░░░░░░░░░░░░░░███▓░░░░░░░
+░░░░░░░░▓██▓░░░░░░░░░░░░░░░░▓███▓░░░░░░░░
+░░░░░░░░░▓███▒░░░░░░░░░░░░░▓████▓░░░░░░░░
+░░░░░░░░░░▒█████▒▒▒░░░▒▒▒█████▒░░░░░░░░░░
+░░░░░░░░░░░░▒▓█████████████▓▒░░░░░░░░░░░░
+░░░░░░░░░░░░░░░▒▒▒▓▓▓▓▓▒▒▒░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"},
 			//Food
 			new String[]{ },
 			//Object
@@ -80,7 +209,31 @@ public class ASCIIArtScript : MonoBehaviour {
 			//Emote
 			new String[]{ },
 			//Animal
-			new String[]{ }
+			new String[]{ @"       ▓▒▒▒▓░░░░░░░░░░░▓▓
+        ▓▓░░▒▒▒▒▓▓▓▓▒▒▒░░▒▒
+         █▒▒░░░░░░░░░▓░░░░▓▒▒
+         █░░▓░░░░░░░█░░░░░░█░▓
+          ▓▒▒░░░░░░▒▒░▒█▒▒▒█░░█
+         ▓██▒▒▒░░▒███▒▒▒░░░▒░█
+         █░▓░▒░░░░▓▓░░░░░░░░▓█▓
+         ▒██▓░░░▓▓██▓░░░░░░██▒░▒▒
+        ▒▒▒▒▓▓░█░░░▓▓▒▒▒▒▒░▓█▒░░░▓
+        ███░▓▓▓░░░░█████▓▒▒█▒░░░░░█
+         ▒██░░░░░░░░░░░░░░░░░░░░░░█
+           ░███░░░░░░░░░░░░░░░░░░░░█
+            ▒▒░░░░░░░░░░░░░░░░░░░░░░█
+          ▒▒░░░░░░░░░░░░░░░░░░░░░░░░█
+        ▒▒░░░░░▒▒░░░░░▒░░░░░░▒░░░░░░░█
+       █░░░░░░░██▒▒░░▓░░░░░░███▒░░░░░█
+      ▓░░░░░░▒▒███▒░░█░░░░░░░██▒▒░░░░█
+     █░░░░░░░░░██▒░░░█░░░░░░░██▒░░░░█
+     █░░░░░░░░░██░░░░░██▒▒░░░█▒░░░░█
+      █░░░░░░░██░░░░░░███▒▒▒▒█░░░░░█
+      ▓▓░░░░░▒▓░▓░░░░░░███████░░░░░█
+    ▒█▒░▓█▒▒█░░░░█░░░░░█░▒▒▒▒█░░░░░█
+   ██▒░░█▒▒░░▒▒▒▒▒█░░░░░█▒░░░█░░░░░█
+    ░▓▒▒▓░░░░░░▓░▒█░░░░░░▓▒▓▓█░░░░░░▓
+  ████░░░░██████░░░███████▓░░░░▓████▓"}
 		}  
 	};
 
@@ -102,10 +255,12 @@ public class ASCIIArtScript : MonoBehaviour {
 	public int answer;
 	public int[] displayAnswers = new int[4];
 
-	public bool moduleSolved = false;
+
 
 
 	void Awake(){
+		moduleId = moduleIdCounter++;
+
 		rowarray = new Renderer[25] {row1,row2,row3,row4,row5,row6,row7,row8,row9,row10,row11,row12,row13,row14,row15,row16,row17,row18,row19,row20,row21,row22,row23,row24,row25} ;
 
 		ASCIIListConstructor ();
@@ -117,13 +272,13 @@ public class ASCIIArtScript : MonoBehaviour {
 		int k = 1;
 		int ans = 0;
 		foreach (int i in displayAnswers) {
-			Debug.LogFormat ("Button "+k+" : "+ i);
+			Debug.LogFormat ("[ASCII Art #"+moduleId+"] Button "+k+" : "+ i);
 			if (i == ASCII [answer])
 				ans = k;
 			k++;
 
 		}
-		Debug.LogFormat ("The answer is button " + ans);
+		Debug.LogFormat ("[ASCII Art #"+moduleId+"] The answer is button " + ans);
 
 	}
 
@@ -197,22 +352,40 @@ public class ASCIIArtScript : MonoBehaviour {
 		
 
 		//category = rand.Next (3);
-		category=0;
-		image = 1;
+		category=2;
+		image = 5;
 		color = rand.Next (6);
 
 		//Chooses 1 random element from the list of paths, and reads all lines
-		imageLines = System.IO.File.ReadAllLines(files[category][image][rand.Next(files[category][image].Length)]);
+		//imageLines = System.IO.File.ReadAllLines(files[category][image][rand.Next(files[category][image].Length)]);
+		imageLines = new String[25];
+
+			using (var reader = new StringReader(files[category][image][rand.Next(files[category][image].Length)]))
+			{
+			int k = 0;
+				for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
+				{
+					imageLines [k] = line;
+					k++;
+				}
+			}
+
 
 		//Display the image
 		int j = 0;
 		foreach(Renderer i in rowarray) {
 			i.transform.GetComponent<TextMesh> ().text = imageLines[j];
-			i.transform.GetComponent<TextMesh> ().color =  colorList [color];
+			if(color==4)
+				i.transform.GetComponent<TextMesh> ().color =  Color.cyan;
+			else 
+				i.transform.GetComponent<TextMesh> ().color =  colorList[color];
+
 			j++;
 		}
 
 	}
+
+	
 
 	void RuleFinder(){
 		if (bomb.GetBatteryCount () == 0) {
@@ -231,14 +404,14 @@ public class ASCIIArtScript : MonoBehaviour {
 	void AnswerFinder(){
 		RuleFinder ();
 		CubeConstructor ();
-		Debug.LogFormat("The cube is at the coordinates "+image+","+color+","+category+" (image, color, characters)");
-		Debug.LogFormat("Rule n°"+rule);
-		Debug.LogFormat("The cube's number is : "+FindNumber (image, color, category));
+		Debug.LogFormat("[ASCII Art #"+moduleId+"] The cube is at the coordinates "+image+","+color+","+category+" (image, color, characters)");
+		Debug.LogFormat("ASCII Art #"+moduleId+"] Rule n°"+rule);
+		Debug.LogFormat("[ASCII Art #"+moduleId+"] The cube's number is : "+FindNumber (image, color, category));
 		FindAdjacent (image, color, category);
-		Debug.LogFormat("Adjacent cubes : ");
+		Debug.LogFormat("[ASCII Art #"+moduleId+"] Adjacent cubes : ");
 		foreach (int i in PossibleAnswers) {
 			if (i != -1)
-				Debug.LogFormat ("n°" + i+ " -> ASCII conversion : "+ ASCII[i]);
+				Debug.LogFormat ("[ASCII Art #"+moduleId+"] n°" + i+ " -> ASCII conversion : "+ ASCII[i]);
 		}
 		
 		answer = -1;
@@ -288,7 +461,7 @@ public class ASCIIArtScript : MonoBehaviour {
 		GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
 		InteractionPunchAnswer (nb);
 		if (!moduleSolved) {
-			Debug.LogFormat ("You pressed button " + (nb + 1));
+			Debug.LogFormat ("[ASCII Art #"+moduleId+"] You pressed button " + (nb + 1));
 			if (displayAnswers [nb] == ASCII [answer]) {
 				//Solved
 				GetComponent<KMBombModule> ().HandlePass ();
@@ -560,16 +733,16 @@ public class ASCIIArtScript : MonoBehaviour {
 
 	void InteractionPunchAnswer (int nb){
 		switch (nb) {
-		case 1:
+		case 0:
 			choix1.AddInteractionPunch (1f);
 			break;
-		case 2:
+		case 1:
 			choix2.AddInteractionPunch (1f);
 			break;
 		case 3:
 			choix3.AddInteractionPunch (1f);
 			break;
-		case 4:
+		case 2:
 			choix4.AddInteractionPunch (1f);
 			break;
 		}

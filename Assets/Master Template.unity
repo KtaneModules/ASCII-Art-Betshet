@@ -152,10 +152,15 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114099361212376940, guid: c834b637146b55c4f9ea3aaf741d37db,
+        type: 2}
+      propertyPath: policeChange
+      value: 
+      objectReference: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 102448444999846348, guid: c834b637146b55c4f9ea3aaf741d37db,
         type: 2}
-      propertyPath: m_CharacterSize
-      value: 0.02
+      propertyPath: m_RichText
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c834b637146b55c4f9ea3aaf741d37db, type: 2}

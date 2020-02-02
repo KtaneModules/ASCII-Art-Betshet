@@ -995,4 +995,37 @@ public class ASCIIArtScript : MonoBehaviour {
 			break;
 		}
 	}
+
+	string TwitchHelpMessage = "Use '!{0} query 42' to query that number. Use '!{0} submit <topleft|topright|bottomleft|bottomright> to submit that button. You can also use <tl|tr|bl|br>.";
+
+	IEnumerator ProcessTwitchCommand(string command)
+	{
+		if (command.Equals("submit topleft", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit tl", StringComparison.InvariantCultureIgnoreCase)) {
+			yield return "trycancel";
+			PressAnswer(1);
+		}
+		if (command.Equals("submit topright", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit tr", StringComparison.InvariantCultureIgnoreCase)) {
+			yield return "trycancel";
+			PressAnswer(2);
+		}
+		if (command.Equals("submit bottomleft", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit bl", StringComparison.InvariantCultureIgnoreCase)) {
+			yield return "trycancel";
+			PressAnswer(3);
+		}
+		if (command.Equals("submit bottomright", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit br", StringComparison.InvariantCultureIgnoreCase)) {
+			yield return "trycancel";
+			PressAnswer(4);
+		}
+
+		var parts = command.ToLowerInvariant().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+		if (parts [0].Equals ("query", StringComparison.InvariantCultureIgnoreCase) && "1234567890".Contains (parts [1].ToString())) {
+			char[] query = parts [1].ToCharArray ();
+			foreach (char c in query) {
+				yield return "trycancel";
+				PressNumpad (int.Parse (c.ToString()));
+			}
+			yield return "trycancel";
+			PressQuery ();
+		}
+	}
 }

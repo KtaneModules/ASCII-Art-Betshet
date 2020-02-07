@@ -650,7 +650,6 @@ public class ASCIIArtScript : MonoBehaviour {
 
 	void AnswerFinder(){
 		RuleFinder ();
-		rule = 4;
 		CubeConstructor ();
 		Debug.LogFormat("[Ascii Art #{0}] The cube is at the coordinates {1},{2},{3} (image, color, characters)",moduleId,image,color,category);
 		Debug.LogFormat("[Ascii Art #{0}] Rule n°{1}",moduleId,rule);
@@ -659,7 +658,7 @@ public class ASCIIArtScript : MonoBehaviour {
 		Debug.LogFormat("[Ascii Art #{0}] Adjacent cubes : ",moduleId);
 		foreach (int i in PossibleAnswers) {
 			if (i != -1)
-				Debug.LogFormat ("[Ascii Art #{0}] n°{1} -> ASCII conversion : {2} ",moduleId,i, ASCII[i] );
+				Debug.LogFormat ("[Ascii Art #{0}] n°{1} -> ASCII conversion : {2} ",moduleId,i+1, ASCII[i] );
 		}
 		
 		answer = -1;
@@ -774,6 +773,7 @@ public class ASCIIArtScript : MonoBehaviour {
 		ASCII [106] = 230;
 		ASCII [107] = 253;
 
+
 		//Shuffle
 
 		int n = ASCII.Length;
@@ -846,22 +846,22 @@ public class ASCIIArtScript : MonoBehaviour {
 	void FindAdjacent(int image, int color, int category){
 		PossibleAnswers = new int[] { -1, -1, -1, -1, -1, -1 };
 		if (image != 0) {
-			PossibleAnswers [0] = FindNumber (image - 1, color, category);
+			PossibleAnswers [0] = FindNumber (image - 1, color, category) -1;
 		}
 		if (image != 5) {
-			PossibleAnswers [1] = FindNumber (image + 1, color, category);
+			PossibleAnswers [1] = FindNumber (image + 1, color, category) -1;
 		}
 		if (color != 0) {
-			PossibleAnswers [2] = FindNumber (image, color -1, category);
+			PossibleAnswers [2] = FindNumber (image, color -1, category) -1;
 		}
 		if (color != 5) {
-			PossibleAnswers [3] = FindNumber (image, color +1, category);
+			PossibleAnswers [3] = FindNumber (image, color +1, category) -1;
 		}
 		if (category != 0) {
-			PossibleAnswers [4] = FindNumber (image, color, category -1);
+			PossibleAnswers [4] = FindNumber (image, color, category -1) -1;
 		}
 		if (category != 2) {
-			PossibleAnswers [5] = FindNumber (image, color, category+1);
+			PossibleAnswers [5] = FindNumber (image, color, category+1) -1;
 		}
 	}
 
@@ -1002,23 +1002,24 @@ public class ASCIIArtScript : MonoBehaviour {
 	{
 		if (command.Equals("submit topleft", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit tl", StringComparison.InvariantCultureIgnoreCase)) {
 			yield return "trycancel";
-			PressAnswer(1);
+			PressAnswer(0);
 		}
 		if (command.Equals("submit topright", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit tr", StringComparison.InvariantCultureIgnoreCase)) {
 			yield return "trycancel";
-			PressAnswer(2);
+			PressAnswer(1);
 		}
 		if (command.Equals("submit bottomleft", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit bl", StringComparison.InvariantCultureIgnoreCase)) {
 			yield return "trycancel";
-			PressAnswer(3);
+			PressAnswer(2);
 		}
 		if (command.Equals("submit bottomright", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit br", StringComparison.InvariantCultureIgnoreCase)) {
 			yield return "trycancel";
-			PressAnswer(4);
+			PressAnswer(3);
 		}
 
 		var parts = command.ToLowerInvariant().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-		if (parts [0].Equals ("query", StringComparison.InvariantCultureIgnoreCase) && "1234567890".Contains (parts [1].ToString())) {
+		Int32 tryparse;
+		if (parts [0].Equals ("query", StringComparison.InvariantCultureIgnoreCase) && int.TryParse(parts [1].ToString(),out tryparse) && parts.Length < 3) {
 			char[] query = parts [1].ToCharArray ();
 			foreach (char c in query) {
 				yield return "trycancel";

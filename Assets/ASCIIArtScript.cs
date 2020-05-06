@@ -1020,10 +1020,12 @@ public class ASCIIArtScript : MonoBehaviour {
 		var parts = command.ToLowerInvariant().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 		Int32 tryparse;
 		if (parts.Length != 2) yield break;
-		else if (parts [0].Equals ("query", StringComparison.InvariantCultureIgnoreCase) && int.TryParse(parts [1].ToString(),out tryparse) && parts.Length < 3) {
+		else if (parts [0].Equals ("query", StringComparison.InvariantCultureIgnoreCase) && int.TryParse(parts [1].ToString(),out tryparse)) 
+		{
 			char[] query = parts [1].ToCharArray ();
 			yield return null;
-			foreach (char c in query) {
+			foreach (char c in query) 
+			{
 				int use = int.Parse (c.ToString());
 				switch (use)
 				{

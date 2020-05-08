@@ -875,13 +875,19 @@ public class ASCIIArtScript : MonoBehaviour {
 			for (int i = 0; i < 4; i++) {
 				displayAnswers [i] = ASCII [rand.Next (ASCII.Length)];
 			}
-			//Check if the random hasn't selected the answer
 			ok = true;
+			//Check if the random hasn't selected an adjacent cube
 			for (int i = 0; i < 4; i++) {
-				if (displayAnswers [i] == answer)
-					ok = false;
+				foreach (int j in PossibleAnswers) {
+					if (j != -1) {
+						if (displayAnswers [i] == ASCII [j])
+							ok = false;
+					}
+				}
 			}
 			//To lazy to check if all values are distinct, if anyone wants to do it be my guest
+
+
 		}
 
 		displayAnswers [rand.Next (displayAnswers.Length)] = ASCII[ answer ];

@@ -594,7 +594,7 @@ public class ASCIIArtScript : MonoBehaviour {
 			return false;
 		};
 
-		}
+	}
 
 	void PuzzleCreator(){
 		
@@ -1001,32 +1001,47 @@ public class ASCIIArtScript : MonoBehaviour {
 	IEnumerator ProcessTwitchCommand(string command)
 	{
 		if (command.Equals("submit topleft", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit tl", StringComparison.InvariantCultureIgnoreCase)) {
-			yield return "trycancel";
-			PressAnswer(0);
+			yield return null;
+			choix1.OnInteract();
 		}
 		if (command.Equals("submit topright", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit tr", StringComparison.InvariantCultureIgnoreCase)) {
-			yield return "trycancel";
-			PressAnswer(1);
+			yield return null;
+			choix2.OnInteract();
 		}
 		if (command.Equals("submit bottomleft", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit bl", StringComparison.InvariantCultureIgnoreCase)) {
-			yield return "trycancel";
-			PressAnswer(2);
+			yield return null;
+			choix4.OnInteract();
 		}
 		if (command.Equals("submit bottomright", StringComparison.InvariantCultureIgnoreCase) || command.Equals("submit br", StringComparison.InvariantCultureIgnoreCase)) {
-			yield return "trycancel";
-			PressAnswer(3);
+			yield return null;
+			choix3.OnInteract();
 		}
 
 		var parts = command.ToLowerInvariant().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 		Int32 tryparse;
-		if (parts [0].Equals ("query", StringComparison.InvariantCultureIgnoreCase) && int.TryParse(parts [1].ToString(),out tryparse) && parts.Length < 3) {
+		if (parts.Length != 2) yield break;
+		else if (parts [0].Equals ("query", StringComparison.InvariantCultureIgnoreCase) && int.TryParse(parts [1].ToString(),out tryparse)) 
+		{
 			char[] query = parts [1].ToCharArray ();
-			foreach (char c in query) {
-				yield return "trycancel";
-				PressNumpad (int.Parse (c.ToString()));
+			yield return null;
+			foreach (char c in query) 
+			{
+				int use = int.Parse (c.ToString());
+				switch (use)
+				{
+					case 0: numpad0.OnInteract(); break;
+					case 1: numpad1.OnInteract(); break;
+					case 2: numpad2.OnInteract(); break;
+					case 3: numpad3.OnInteract(); break;
+					case 4: numpad4.OnInteract(); break;
+					case 5: numpad5.OnInteract(); break;
+					case 6: numpad6.OnInteract(); break;
+					case 7: numpad7.OnInteract(); break;
+					case 8: numpad8.OnInteract(); break;
+					case 9: numpad9.OnInteract(); break;
+				}
 			}
-			yield return "trycancel";
-			PressQuery ();
+			numpadQuery.OnInteract();
 		}
 	}
 }
